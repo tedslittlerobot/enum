@@ -4,9 +4,7 @@
     "description": "An enum package optimised for laravel based on myclabs/enum",
     "type": "library",
     "require": {
-        "danielstjules/stringy": "^3.1",
-        "illuminate/support": "^5.7",
-        "myclabs/php-enum": "^1.6"
+        "danielstjules/stringy": "^3.1"
     },
     "require-dev": {
         "mockery/mockery": "^1.2",
