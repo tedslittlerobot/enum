@@ -1,0 +1,45 @@
+{
+    "name": "tlr/enum",
+    "license": "MIT",
+    "description": "An enum package optimised for laravel based on myclabs/enum",
+    "type": "library",
+    "require": {
+        "danielstjules/stringy": "^3.1",
+        "illuminate/support": "^5.7",
+        "myclabs/php-enum": "^1.6"
+    },
+    "require-dev": {
+        "mockery/mockery": "^1.2",
+        "phpunit/php-code-coverage": "^6.1",
+        "phpunit/phpunit": "^7.5",
+        "squizlabs/php_codesniffer": "^3.4"
+    },
+    "autoload": {
+        "psr-4": {
+            "Tlr\\Phpnum\\": "src/"
+        },
+        "files": ["src/helpers.php"]
+    },
+    "authors": [
+        {
+            "name": "Stef",
+            "email": "stef@tedslittlerobot.com"
+        }
+    ],
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Tlr\\Phpnum\\Laravel\\EnumServiceProvider"
+            ]
+        }
+    },
+    "suggest": {
+        "laravel/nova": "Required to use the enum Field type.",
+        "laravel/framework": "Some version of laravel is required for this to be used."
+    },
+    "config": {
+        "sort-packages": true
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}
