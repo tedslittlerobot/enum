@@ -6,14 +6,7 @@ use ReflectionClass;
 use Tlr\Phpnum\Core;
 use UnexpectedValueException;
 
-/**
- * @todo  - acccept intermediary values (not above maximum bit range - ie. must
- * mask to at least one valid value - override static::checkValue())
- * @todo  - compare masks (matches() method)
- * @todo  - compare masks (matchesAll() method)
- * @todo  - method to separate into separate bit mask values (flags())
- */
-class Flag extends Core
+abstract class Flag extends Core
 {
     /**
      * Should there be a zero value
@@ -76,7 +69,7 @@ class Flag extends Core
     {
         $values = static::pureValues();
 
-        $lower = head($values);
+        $lower   = reset($values);
         $nextBit = end($values) * 2;
 
         return $value >= $lower && $value < $nextBit;

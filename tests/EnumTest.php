@@ -124,11 +124,11 @@ class EnumTest extends TestCase
      *
      * @return void
      */
-    public function testFriendlyValue()
+    public function testFriendlyName()
     {
         $enum = TestClassEnum::TWENTY_SIX();
 
-        $this->assertEquals('Twenty Six', $enum->friendlyValue());
+        $this->assertEquals('Twenty Six', $enum->friendlyName());
     }
 
     /**

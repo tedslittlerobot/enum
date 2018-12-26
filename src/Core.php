@@ -38,13 +38,13 @@ abstract class Core implements JsonSerializable, Serializable
     }
 
     /**
-     * Get the friendly value
+     * Get the friendly name
      *
      * @return string
      */
-    public function friendlyValue() : string
+    public function friendlyName() : string
     {
-        return array_flip(static::friendlyValues())[$this->value];
+        return array_flip(static::friendlyNames())[$this->value];
     }
 
     /**
@@ -216,9 +216,10 @@ abstract class Core implements JsonSerializable, Serializable
      *
      * @return array
      */
-    public static function friendlyValues() : array
+    public static function friendlyNames() : array
     {
         $values = static::values();
+
         $keys   = array_keys($values);
         $values = array_values($values);
         $keys   = array_map(function ($key) {

@@ -6,7 +6,7 @@ use Illuminate\Support\Collection;
 use ReflectionClass;
 use Stringy\Stringy;
 
-class Enum extends Core
+abstract class Enum extends Core
 {
     /**
      * One way to define the enums

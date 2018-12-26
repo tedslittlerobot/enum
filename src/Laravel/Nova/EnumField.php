@@ -27,9 +27,9 @@ class EnumField extends Select
         $this->enum = $enum;
 
         return $this
-            ->options(array_flip($enum::friendlyValues()))
+            ->options(array_flip($enum::friendlyNames()))
             ->displayUsing(function ($value) {
-                return $value->friendlyValue();
+                return $value->friendlyName();
             })
         ;
     }
