@@ -92,8 +92,154 @@ function createNewArticle(ArticleType $type) {
 
 ## Full Docs (Enum)
 
+### Setup
+
+You can declare the values of the enum in three ways:
+
+As above - using const declarations when declaring a class. This should probably be considered the "default" way of declaring an enum.
+
+```php
+class ArticleType extends Enum 
+{
+    const BLOG_POST   = 'blog';
+    const REVIEW      = 'review';
+    const RECIPE      = 'recipe';
+    const CODE_SAMPLE = 'code';
+}
+```
+
+In an `$enum` static variable.
+
+
+```php
+class ArticleType extends Enum 
+{
+    protected static $enum = [
+        'BLOG_POST'   = 'blog',
+        'REVIEW'      = 'review',
+        'RECIPE'      = 'recipe',
+        'CODE_SAMPLE' = 'code',
+    ];
+}
+```
+
+Override the `generateEnums` method (the default implementation defines the above two ways of declaring the values). This could be used to load the values from a database, etc. and should be used with care. This method will only be called once, as the result of it is cached.
+
+```php
+class ArticleType extends Enum
+{
+    /**
+     * Get the values for the enum
+     *
+     * @return array
+     */
+    public static function generateEnums() : array
+    {
+        return [
+            'BLOG_POST'   = 'blog',
+            'REVIEW'      = 'review',
+            'RECIPE'      = 'recipe',
+            'CODE_SAMPLE' = 'code',
+        ];
+    }
+}
+```
+
+### Instantiating an Enum
+
+The two main ways of instantiating an enum are:
+
+You can use any of the declared enum **names** to statically instantiate an enum instance. This is useful when manually declaring a value - perhaps to save to the database.
+
+```php
+ArticleType::REVIEW();
+```
+
+You can provide the **value** of the enum to the constructor. This is useful when loading values from a database, or getting input from a user.
+
+```php
+new ArticleType($request->input('article_type'));
+```
+
+You can also get a list of all instantiated enums with the all static method:
+
+```php
+foreach(ArticleType::all() as $name => $enum) {
+    echo "{$name} : {$enum->value()}";
+}
+```
+
+#### Getting information on an enum
+
+You can get various bits of information out of an enum using helper methods:
+
+```php
+$type = ArticleType::CODE_SAMPLE();
+
+$type->value();        // 'code'
+$type->name();         // 'CODE_SAMPLE'
+$type->friendlyName(); // 'Code Sample'
+```
+
+The friendlyName method can be used to display values to a user. It will attempt to make the key name into words, and `Title Case` them. You can override this in two ways:
+
+Override the `friendlifier` static method. It will be passed the key name of the enum, and should return its friendly value.
+
+```php
+protected static function friendlifier(string $name) : string;
+```
+
+Override the `friendlyNames` static method, which should return an array/map with the friendly names on the left, and the ordinary values on the right.
+
+```php
+public static function friendlyNames() : array
+{
+    return [
+        return [
+            'Blog Post'   = 'blog',
+            'Review'      = 'review',
+            'Recipe'      = 'recipe',
+            'Code Sample' = 'code',
+        ];
+    ];
+}
+```
+
+#### Comparing Enums
+
+You can compare any enum against another with the `is` or `equals` methods (they are the same, both are included in case they make more syntactical / English sense when writing code)
+
+```php
+$type = $request->input('type'); // 'review'
+(new ArticleType($type))->is(ArticleType::REVIEW()); // true
+```
+
+This comparison takes into account the class name of the enum, as well as its value, so multiple different enums will not be able to be cross-compared to the original enum.
+
+```php
+ArticleType::RECIPE()->is(SharedItemType::RECIPE()); // false
+```
+
+## Flag Enums
+
+// @todo - intro - how to use flags
+
+// @todo - similarities to enums
+
+// @todo - instantiating & intermediary values
+
+// @todo - comparing
+
+// @todo - reading
+
+## Laravel
+
 // @todo
 
-## Full Docs (Flag)
+### Validation Rule
+
+// @todo
+
+### Nova Field
 
 // @todo
