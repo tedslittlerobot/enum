@@ -222,11 +222,114 @@ ArticleType::RECIPE()->is(SharedItemType::RECIPE()); // false
 
 ## Flag Enums
 
-// @todo - intro - how to use flags
+### Basic Explanation
 
-// @todo - similarities to enums
+Flags (or bit masks) are a common feature of many programming langauges - PHP uses some in its standard library under the guise of some bitmask constants - see [the second argument to json_encode](http://php.net/manual/en/function.json-encode.php) for an example.
 
-// @todo - instantiating & intermediary values
+They are a kind of enum, where each value is an increasing power of 2 (1, 2, 4, 8, 16, etc.). While a flag is technically just an integer value, if you represent those integers in binary, you get something interesting:
+
+- `1  : 00001`
+- `2  : 00010`
+- `4  : 00100`
+- `8  : 01000`
+- `16 : 10000`
+
+If you assign a *meaning* to each bit position (starting from the right), then you have a way of using an integer value to store a set of switched, or flags. You can chain these together - for example, the integer `5` is `00101` - or 1 and 4 combined; the integer 31 is all of them combined; the integer 0 is none of them.
+
+This may seem somewhat complicated at first, but once you have a feel for this, flags can be a very powerful tool, allowing you to pass a full set of option switches in a single argument, without losing any of the contextual meaning of the switches. In the above example, we may assign some *names* to the values (here, using the `json_encode` example - correct values at the time of writing).
+
+- `1  : 00001 : JSON_HEX_TAG`
+- `2  : 00010 : JSON_HEX_AMP`
+- `4  : 00100 : JSON_HEX_APOS`
+- `8  : 01000 : JSON_HEX_QUOT`
+- `16 : 10000 : JSON_FORCE_OBJECT`
+
+You can pass the first three to `json_encode` with the `|` operator like so:
+
+```php
+$flag = JSON_HEX_TAG | JSON_HEX_AMP | JJSON_HEX_APOS;
+json_encode([], $flag);
+```
+
+You can check if the flag matches a possible flag value with the `&` operator:
+
+```php
+$flag & JSON_HEX_AMP; // true
+$flag & JSON_FORCE_OBJECT; // false
+```
+
+Of course you can check if it matches an exact set with `===`:
+
+```php
+$flag === JSON_HEX_TAG | JSON_HEX_AMP | JJSON_HEX_APOS; // true
+$flag === JSON_HEX_TAG; // false
+```
+
+There is much more you can do with th ebitwise operators and flags, but these are the basics.
+
+### Caveat
+
+Once a flag value has been defined, it can never change in a future version of an application. If PHP decided to remove `JSON_HEX_AMP` and add a new possible switch, `JSON_HEX_SPACE` for example, they would have to add `JSON_HEX_SPACE` to the end of the list of values, and simply not allow the value for `JSON_HEX_AMP`, or ignore it if it is passed (ie. it would *deprecate* the value `2`).
+
+Flags should be used for core things that are not often changed.
+
+### Flags and Enums
+
+The `json_encode` options are just consts set to certain values (powers of 2, as described above). The advantage of using flags with a package like this one, is that the flags, values, and validation, become encapsulated in an object, making definition, referencing, validation, and comparison easier.
+
+The `Flag` class and `Enum` class used above share the same base class, so almost all of the same things from above apply, with a few differences for defining, and a few extra methods for comparing.
+
+### Defining Flags
+
+To use a very simple permissions set as an example.
+
+```php
+class Permission extends Flag
+{
+    protected static $flags = [
+        'MANAGE_STAFF',
+        'MANAGE_RESEARCH_PROJECTS',
+        'VIEW_SECRET_RESEARCH_PROJECTS',
+        'VIEW_RESEARCH_REPORTS',
+    ];
+}
+
+// in some code
+
+$user->permissions = Permission::MANAGE_STAFF();
+$reporter->permissions = Permission::VIEW_RESEARCH_REPORTS();
+```
+
+### Using masks of flags
+
+The following are all the same:
+
+```php
+$user->permissions = Permission::MANAGE_STAFF();
+$user->permissions = new Permission(0b0001);
+$user->permissions = new Permission(1); // although you would probably get this from some user input.
+```
+
+If we could only set the user to be able to do ONE of those things, though, it would be a bit limiting. We can assign multiple flags to one value like so:
+
+```php
+// The following are equivalent:
+$user->permissions = Permission::combineFlags([
+    Permission::VIEW_SECRET_RESEARCH_PROJECTS(),
+    Permission::VIEW_RESEARCH_REPORTS(),
+]);
+
+$user->permissions = new Permission(
+    Permission::VIEW_SECRET_RESEARCH_PROJECTS()->value() | Permission::VIEW_RESEARCH_REPORTS()
+);
+
+$user->permissions = new Permission(0b1100);
+$user->permissions = new Permission(12);
+```
+
+### Comparing Flags
+
+In addition to the enum comparison methods (like `$enum->is($other)`), there are some specific to flags.
 
 // @todo - comparing
 
