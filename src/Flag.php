@@ -67,12 +67,10 @@ abstract class Flag extends Core
      */
     public static function isValidValue($value) : bool
     {
-        $values = static::pureValues();
+        $isValidZero = $value === 0 && in_array(0, static::pureValues());
+        $isValidFlag = $value & static::flagValueForAll();
 
-        $lower   = reset($values);
-        $nextBit = end($values) * 2;
-
-        return $value >= $lower && $value < $nextBit;
+        return $isValidZero || $isValidFlag;
     }
 
     /**
@@ -130,5 +128,29 @@ abstract class Flag extends Core
         return array_values(array_filter(static::all(), function(Flag $value) {
             return $this->matches($value);
         }));
+    }
+
+    /**
+     * Check if the current flag contains all of the passed in ones
+     *
+     * @param  ...Tlr\Phpnum\Flag  $flag
+     * @return int
+     */
+    public static function flagValueForAll() : int
+    {
+        return array_reduce(array_values(static::values()), function (int $carry, $value) {
+            return $carry | $value;
+        }, 0);
+    }
+
+    /**
+     * Check if the current flag contains all of the passed in ones
+     *
+     * @param  ...Tlr\Phpnum\Flag  $flag
+     * @return boolean
+     */
+    public static function flagForAll() : Flag
+    {
+        return new static(static::flagValueForAll());
     }
 }

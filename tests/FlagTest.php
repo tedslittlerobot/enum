@@ -22,6 +22,15 @@ class TestFlagClassStupidConsts extends Flag
     const NO_GOOD_VALUE = 3;
 }
 
+class TestFlagClassMissingFlags extends Flag
+{
+    const ZERO          = 0;
+    const A             = 1;
+    const B             = 2;
+    // const C             = 4; // Missing 0b0100
+    const D             = 8;
+}
+
 class FlagTest extends TestCase
 {
     /**
@@ -259,5 +268,42 @@ class FlagTest extends TestCase
         $this->assertCount(2, $comparator);
         $this->assertSame(2, $comparator[0]->value());
         $this->assertSame(8, $comparator[1]->value());
+    }
+
+    /**
+     * A basic test example.
+     *
+     * @return void
+     */
+    public function testGetCompoundFlagForAll()
+    {
+        $comparator = TestFlagClass::flagForAll();
+
+        $this->assertSame(0b11111, $comparator->value());
+    }
+
+    /**
+     * A basic test example.
+     *
+     * @return void
+     */
+    public function testGetCompoundFlagForAllWithMissing()
+    {
+        $comparator = TestFlagClassMissingFlags::flagForAll();
+
+        $this->assertSame(0b1011, $comparator->value());
+    }
+
+    /**
+     * A basic test example.
+     *
+     * @return void
+     */
+    public function testCompoundFlagValidationFailsForMissingFlag()
+    {
+        $this->assertTrue(TestFlagClassMissingFlags::isValidValue(1));
+        $this->assertTrue(TestFlagClassMissingFlags::isValidValue(2));
+        $this->assertFalse(TestFlagClassMissingFlags::isValidValue(4));
+        $this->assertTrue(TestFlagClassMissingFlags::isValidValue(8));
     }
 }
