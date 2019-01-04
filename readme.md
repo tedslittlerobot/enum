@@ -1,7 +1,11 @@
-Tlr\Phpnum
-========
+TLR \ PHP Enum Library
+======================
 
-A Laravel (and Nova) enum package. Heavily based on [myclabs/php-enum](https://github.com/myclabs/php-enum) (I did not fork, as I made some subtle changes to the core classes).
+[![Build Status](https://travis-ci.com/tedslittlerobot/enum.svg?branch=master)](https://travis-ci.com/tedslittlerobot/enum)
+
+A raw PHP Enum / Flags library. Heavily based on [myclabs/php-enum](https://github.com/myclabs/php-enum) (I did not fork, as I made some subtle changes to the core classes).
+
+With support for Laravel (and Nova).
 
 Key features:
 
