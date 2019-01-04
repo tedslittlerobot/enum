@@ -247,7 +247,7 @@ This may seem somewhat complicated at first, but once you have a feel for this, 
 You can pass the first three to `json_encode` with the `|` operator like so:
 
 ```php
-$flag = JSON_HEX_TAG | JSON_HEX_AMP | JJSON_HEX_APOS;
+$flag = JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS;
 json_encode([], $flag);
 ```
 
@@ -261,7 +261,7 @@ $flag & JSON_FORCE_OBJECT; // false
 Of course you can check if it matches an exact set with `===`:
 
 ```php
-$flag === JSON_HEX_TAG | JSON_HEX_AMP | JJSON_HEX_APOS; // true
+$flag === JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS; // true
 $flag === JSON_HEX_TAG; // false
 ```
 
