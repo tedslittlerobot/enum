@@ -5,9 +5,13 @@ namespace Tlr\Phpnum;
 use Illuminate\Support\Collection;
 use ReflectionClass;
 use Stringy\Stringy;
+use Tlr\Phpnum\Core\Core;
+use Tlr\Phpnum\Traits\ReflectsFromConstants;
 
 abstract class Enum extends Core
 {
+    use ReflectsFromConstants;
+
     /**
      * One way to define the enums
      *
@@ -26,8 +30,6 @@ abstract class Enum extends Core
             return static::$enum;
         }
 
-        $reflection = new ReflectionClass(static::class);
-
-        return $reflection->getConstants();
+        return static::getConstants();
     }
 }

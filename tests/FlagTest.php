@@ -99,6 +99,27 @@ class FlagTest extends TestCase
      *
      * @return void
      */
+    public function testUnionFlags()
+    {
+        $this->assertEquals(
+            3,
+            TestFlagClass::union(
+                TestFlagClass::A(),
+                TestFlagClass::B()
+            )->value()
+        );
+
+        $this->assertEquals(
+            0,
+            TestFlagClass::union()->value()
+        );
+    }
+
+    /**
+     * A basic test example.
+     *
+     * @return void
+     */
     public function testCombineFlagsFailsWithOtherFlagTypes()
     {
         $this->expectException(UnexpectedValueException::class);

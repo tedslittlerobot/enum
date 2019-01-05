@@ -3,11 +3,14 @@
 namespace Tlr\Phpnum;
 
 use ReflectionClass;
-use Tlr\Phpnum\Core;
+use Tlr\Phpnum\Core\Flag as Core;
+use Tlr\Phpnum\Traits\ReflectsFromConstants;
 use UnexpectedValueException;
 
 abstract class Flag extends Core
 {
+    use ReflectsFromConstants;
+
     /**
      * Should there be a zero value
      *
@@ -33,9 +36,7 @@ abstract class Flag extends Core
             return static::generateFromStaticValues();
         }
 
-        $reflection = new ReflectionClass(static::class);
-
-        return $reflection->getConstants();
+        return static::getConstants();
     }
 
     /**
@@ -77,11 +78,11 @@ abstract class Flag extends Core
      * Reduce the given array of flags into a single flag value
      *
      * @param  array  $flags
-     * @return Tlr\Phpnum\Flag
+     * @return Tlr\Phpnum\Core\Flag
      */
-    public static function combineFlags(array $flags) : Flag
+    public static function combineFlags(array $flags) : Core
     {
-        $value = array_reduce($flags, function(int $carry, Flag $flag) {
+        $value = array_reduce($flags, function(int $carry, Core $flag) {
             if (!$flag instanceof static) {
                 throw new UnexpectedValueException(sprintf(
                     'Cannot merge flag type [%s] into [%s]',
@@ -119,19 +120,7 @@ abstract class Flag extends Core
     }
 
     /**
-     * Get all of the flags contained within the current value
-     *
-     * @return array<Tlr\Phpnum\Flag>
-     */
-    public function matchedFlags() : array
-    {
-        return array_values(array_filter(static::all(), function(Flag $value) {
-            return $this->matches($value);
-        }));
-    }
-
-    /**
-     * Check if the current flag contains all of the passed in ones
+     * Get the value of the
      *
      * @param  ...Tlr\Phpnum\Flag  $flag
      * @return int
@@ -146,10 +135,10 @@ abstract class Flag extends Core
     /**
      * Check if the current flag contains all of the passed in ones
      *
-     * @param  ...Tlr\Phpnum\Flag  $flag
+     * @param  ...Tlr\Phpnum\Core\Flag  $flag
      * @return boolean
      */
-    public static function flagForAll() : Flag
+    public static function flagForAll() : Core
     {
         return new static(static::flagValueForAll());
     }

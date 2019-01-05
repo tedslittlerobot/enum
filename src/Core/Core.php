@@ -1,6 +1,6 @@
 <?php
 
-namespace Tlr\Phpnum;
+namespace Tlr\Phpnum\Core;
 
 use BadMethodCallException;
 use JsonSerializable;
