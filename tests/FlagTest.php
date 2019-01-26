@@ -327,4 +327,18 @@ class FlagTest extends TestCase
         $this->assertFalse(TestFlagClassMissingFlags::isValidValue(4));
         $this->assertTrue(TestFlagClassMissingFlags::isValidValue(8));
     }
+
+    /**
+     * A basic test example.
+     *
+     * @return void
+     */
+    public function testFlagValueSplit()
+    {
+        $values = TestFlagClass::union(TestFlagClass::A(), TestFlagClass::B())->split();
+
+        $this->assertCount(2, $values);
+        $this->assertTrue(reset($values)->is(TestFlagClass::A()));
+        $this->assertTrue(end($values)->is(TestFlagClass::B()));
+    }
 }

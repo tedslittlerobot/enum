@@ -60,4 +60,16 @@ abstract class Flag extends Core
             return $this->matches($value);
         }));
     }
+
+    /**
+     * Split the current union into all possible values
+     *
+     * @return array
+     */
+    public function split() : array
+    {
+        return array_filter(static::all(), function ($enum) {
+            return $this->matches($enum);
+        });
+    }
 }
