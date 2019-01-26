@@ -99,6 +99,27 @@ class FlagTest extends TestCase
      *
      * @return void
      */
+    public function testUnionFlags()
+    {
+        $this->assertEquals(
+            3,
+            TestFlagClass::union(
+                TestFlagClass::A(),
+                TestFlagClass::B()
+            )->value()
+        );
+
+        $this->assertEquals(
+            0,
+            TestFlagClass::union()->value()
+        );
+    }
+
+    /**
+     * A basic test example.
+     *
+     * @return void
+     */
     public function testCombineFlagsFailsWithOtherFlagTypes()
     {
         $this->expectException(UnexpectedValueException::class);
@@ -305,5 +326,19 @@ class FlagTest extends TestCase
         $this->assertTrue(TestFlagClassMissingFlags::isValidValue(2));
         $this->assertFalse(TestFlagClassMissingFlags::isValidValue(4));
         $this->assertTrue(TestFlagClassMissingFlags::isValidValue(8));
+    }
+
+    /**
+     * A basic test example.
+     *
+     * @return void
+     */
+    public function testFlagValueSplit()
+    {
+        $values = TestFlagClass::union(TestFlagClass::A(), TestFlagClass::B())->split();
+
+        $this->assertCount(2, $values);
+        $this->assertTrue(reset($values)->is(TestFlagClass::A()));
+        $this->assertTrue(end($values)->is(TestFlagClass::B()));
     }
 }

@@ -2,7 +2,7 @@
 
 namespace Tlr\Phpnum;
 
-use Tlr\Phpnum\Core;
+use Tlr\Phpnum\Core\Core;
 
 /**
  * Helper for model getters using enums

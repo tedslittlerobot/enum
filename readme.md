@@ -21,8 +21,6 @@ Key features for Laravel:
 
 ## Installation
 
-**Not on packagist yet**, as these docs are not finished, but when it is, it will be available to install using:
-
 ```bash
 composer require tlr/enum
 ```
