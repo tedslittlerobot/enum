@@ -10,7 +10,7 @@ use UnexpectedValueException;
 
 abstract class Core implements JsonSerializable, Serializable
 {
-    protected $value;
+    private $value;
 
     public function __construct($value)
     {
@@ -25,6 +25,22 @@ abstract class Core implements JsonSerializable, Serializable
     public function value()
     {
         return $this->value;
+    }
+
+    /**
+     * Set the value
+     *
+     * @param mixed $value
+     */
+    private function setValue($value)
+    {
+        if ($value instanceof Core) {
+            $value = $value->value();
+        }
+
+        $this->value = static::checkValue($value);
+
+        return $this;
     }
 
     /**
@@ -52,9 +68,19 @@ abstract class Core implements JsonSerializable, Serializable
      *
      * @return string
      */
-    public function __toString()
+    public function toString() : string
     {
         return (string) $this->value;
+    }
+
+    /**
+     * Convert to a string
+     *
+     * @return string
+     */
+    public function __toString()
+    {
+        return $this->toString();
     }
 
     /**
@@ -73,30 +99,35 @@ abstract class Core implements JsonSerializable, Serializable
     }
 
     /**
-     * Included for compatability with myclabs library
+     * Check if the enum is any of the provided enums
+     *
+     * @param Core ...$enums
+     *
+     * @return bool
+     */
+    public function isOneOf(Core ...$enums)
+    {
+        foreach ($enums as $enum) {
+            if ($this->is($enum)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Included for compatability with myclabs library. Preferred comparison
+     * method is ->is($enum)
      *
      * @param  Core   $enum
+     *
      * @return bool
+     * @deprecated use ->is($enum)
      */
     public function equals(?Core $enum) : bool
     {
         return $this->is($enum);
-    }
-
-    /**
-     * Set the value
-     *
-     * @param mixed $value
-     */
-    protected function setValue($value)
-    {
-        if ($value instanceof Core) {
-            $value = $value->value();
-        }
-
-        $this->value = static::checkValue($value);
-
-        return $this;
     }
 
     /**
@@ -262,12 +293,23 @@ abstract class Core implements JsonSerializable, Serializable
     }
 
     /**
-     * Check if the key/name exists on the enum
+     * Check if the key exists on the enum
      *
      * @param  string  $key
      * @return boolean
      */
     public static function has(string $key) : bool
+    {
+        return in_array($key, static::values());
+    }
+
+    /**
+     * Check if the key/name exists on the enum
+     *
+     * @param  string  $key
+     * @return boolean
+     */
+    public static function hasName(string $key) : bool
     {
         return isset(static::values()[$key]);
     }
@@ -291,7 +333,7 @@ abstract class Core implements JsonSerializable, Serializable
      */
     public static function __callStatic($name, $args)
     {
-        if (static::has($name)) {
+        if (static::hasName($name)) {
             return new static(static::values()[$name]);
         }
 
