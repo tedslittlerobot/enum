@@ -37,7 +37,7 @@ class EnumField extends Select
     /**
      * Get the validation rules for this field.
      *
-     * @param  \Laravel\Nova\Http\Requests\NovaRequest  $request
+     * @param NovaRequest $request
      * @return array
      */
     public function getRules(NovaRequest $request)

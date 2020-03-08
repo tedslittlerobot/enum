@@ -2,8 +2,6 @@
 
 namespace Tlr\Phpnum\Core;
 
-use Tlr\Phpnum\Core\Core;
-
 abstract class Flag extends Core
 {
     /**
@@ -56,7 +54,7 @@ abstract class Flag extends Core
      */
     public function matchedFlags() : array
     {
-        return array_values(array_filter(static::all(), function(Flag $value) {
+        return array_values(array_filter(static::all(), function (Flag $value) {
             return $this->matches($value);
         }));
     }

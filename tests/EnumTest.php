@@ -11,6 +11,16 @@ class TestClassEnum extends Enum
         'THREE'      => 'c',
         'TWENTY_SIX' => 'z',
     ];
+
+    public function resolveForOne(...$args)
+    {
+        return implode(',', $args);
+    }
+
+    public function resolveForTwentySix()
+    {
+        return 'twenty-six';
+    }
 }
 
 class TestClassEnumConst extends Enum
@@ -315,5 +325,31 @@ class EnumTest extends TestCase
         $enum = TestClassEnum::random();
 
         $this->assertInstanceof(TestClassEnum::class, $enum);
+    }
+
+    /**
+     * A basic test example.
+     *
+     * @return void
+     */
+    public function testResolvedMethodCall_toSingleWordMethod()
+    {
+        $enum = TestClassEnum::ONE();
+        $result = $enum->resolve('foo', 'bar', 'baz');
+
+        $this->assertEquals('foo,bar,baz', $result);
+    }
+
+    /**
+     * A basic test example.
+     *
+     * @return void
+     */
+    public function testResolvedMethodCall_toMultiWordWordKey()
+    {
+        $enum = TestClassEnum::TWENTY_SIX();
+        $result = $enum->resolve('foo', 'bar', 'baz');
+
+        $this->assertEquals('twenty-six', $result);
     }
 }

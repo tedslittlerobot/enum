@@ -82,7 +82,7 @@ abstract class Flag extends Core
      */
     public static function combineFlags(array $flags) : Core
     {
-        $value = array_reduce($flags, function(int $carry, Core $flag) {
+        $value = array_reduce($flags, function (int $carry, Core $flag) {
             if (!$flag instanceof static) {
                 throw new UnexpectedValueException(sprintf(
                     'Cannot merge flag type [%s] into [%s]',
