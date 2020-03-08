@@ -352,4 +352,28 @@ class EnumTest extends TestCase
 
         $this->assertEquals('twenty-six', $result);
     }
+
+    /**
+     * A basic test example.
+     *
+     * @return void
+     */
+    public function testResolvedMethodCall_withBadMethod_throws()
+    {
+        $enum = TestClassEnum::TWENTY_SIX();
+        $this->expectException(BadMethodCallException::class);
+        $result = $enum->monkey('foo', 'bar', 'baz');
+    }
+
+    /**
+     * A basic test example.
+     *
+     * @return void
+     */
+    public function testResolvedMethodCall_withInvalidMethodViaType_throws()
+    {
+        $enum = TestClassEnum::TWO();
+        $this->expectException(BadMethodCallException::class);
+        $result = $enum->resolve('foo', 'bar', 'baz');
+    }
 }

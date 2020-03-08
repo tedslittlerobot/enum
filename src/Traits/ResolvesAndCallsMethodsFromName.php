@@ -16,6 +16,19 @@ trait ResolvesAndCallsMethodsFromName
      */
     public function __call(string $action, array $arguments)
     {
+        return $this->callMethodForType($action, ...$arguments);
+    }
+
+    /**
+     * Call a type specific method
+     * 
+     * @param string $action
+     * @param mixed  ...$arguments
+     *
+     * @return mixed
+     */
+    public function callMethodForType(string $action, ...$arguments)
+    {
         $method = $this->methodForType($action);
 
         if (!method_exists($this, $method)) {
