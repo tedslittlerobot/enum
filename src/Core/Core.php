@@ -31,8 +31,9 @@ abstract class Core implements JsonSerializable, Serializable
      * Set the value
      *
      * @param mixed $value
+     * @return Core
      */
-    private function setValue($value)
+    private function setValue($value) : Core
     {
         if ($value instanceof Core) {
             $value = $value->value();

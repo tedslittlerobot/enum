@@ -2,8 +2,6 @@
 
 namespace Tlr\Phpnum\Core;
 
-use Tlr\Phpnum\Core\Core;
-
 abstract class Flag extends Core
 {
     /**
