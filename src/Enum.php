@@ -2,14 +2,12 @@
 
 namespace Tlr\Phpnum;
 
-use Illuminate\Support\Collection;
 use Tlr\Phpnum\Core\Core;
-use Tlr\Phpnum\Traits\ResolvesAndCallsMethodsFromName;
 use Tlr\Phpnum\Traits\ReflectsFromConstants;
 
 abstract class Enum extends Core
 {
-    use ReflectsFromConstants, ResolvesAndCallsMethodsFromName;
+    use ReflectsFromConstants;
 
     /**
      * One way to define the enums

@@ -6,10 +6,18 @@ use BadMethodCallException;
 use JsonSerializable;
 use Serializable;
 use Stringy\Stringy;
+use Tlr\Phpnum\Traits\ResolvesAndCallsMethodsFromName;
 use UnexpectedValueException;
 
 abstract class Core implements JsonSerializable, Serializable
 {
+    use ResolvesAndCallsMethodsFromName;
+
+    /**
+     * The core enum value
+     *
+     * @var string
+     */
     private $value;
 
     public function __construct($value)
@@ -227,8 +235,6 @@ abstract class Core implements JsonSerializable, Serializable
             ->humanize()
             ->titleize()
         ;
-
-        return $name;
     }
 
     /**
@@ -318,11 +324,29 @@ abstract class Core implements JsonSerializable, Serializable
     /**
      * Get a random instantiated enum
      *
-     * @return Tlr\Phpnum\Core
+     * @return Core
      */
     public static function random() : Core
     {
         return new static(array_rand(array_flip(static::pureValues())));
+    }
+
+    /**
+     * Calls a type specific method
+     *
+     * @param string $action
+     * @param array  $arguments
+     *
+     * @return mixed
+     */
+    public function __call(string $action, array $arguments)
+    {
+        // A fix for a strange issue where php sometimes uses __call instead of __callStatic for static calls.
+        if (static::hasName($action)) {
+            return new static(static::values()[$action]);
+        }
+
+        return $this->callMethodForType($action, ...$arguments);
     }
 
     /**
@@ -338,10 +362,12 @@ abstract class Core implements JsonSerializable, Serializable
             return new static(static::values()[$name]);
         }
 
-        throw new BadMethodCallException(sprintf(
-            'No static method or enum constant for [%s] in enum [%s]',
-            $name,
-            static::class
-        ));
+        throw new BadMethodCallException(
+            sprintf(
+                'No static method or enum constant for [%s] in enum [%s]',
+                $name,
+                static::class
+            )
+        );
     }
 }

@@ -7,19 +7,6 @@ use BadMethodCallException;
 trait ResolvesAndCallsMethodsFromName
 {
     /**
-     * Calls a type specific method
-     *
-     * @param string $action
-     * @param array  $arguments
-     *
-     * @return mixed
-     */
-    public function __call(string $action, array $arguments)
-    {
-        return $this->callMethodForType($action, ...$arguments);
-    }
-
-    /**
      * Call a type specific method
      * 
      * @param string $action
