@@ -47,7 +47,7 @@ class EnumConstructionTest extends TestCase
     {
         $this->expectException(UnexpectedValueException::class);
 
-        $enum = new SuperstitiousNumbers('π');
+        new SuperstitiousNumbers('π');
     }
 
     /**
@@ -68,7 +68,7 @@ class EnumConstructionTest extends TestCase
     {
         $this->expectException(BadMethodCallException::class);
 
-        $enum = SuperstitiousNumbers::PI();
+        SuperstitiousNumbers::PI();
     }
 
     /**

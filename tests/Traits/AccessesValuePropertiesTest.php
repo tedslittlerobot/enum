@@ -44,4 +44,30 @@ class AccessesValuePropertiesTest extends TestCase
 
         $this->assertSame('19', (string) $enum);
     }
+
+
+    /**
+     * @test
+     */
+    public function all_returnsAllValues()
+    {
+        $enums = FooBar::all();
+
+        $this->assertCount(4, $enums);
+
+        $this->assertTrue(FooBar::FOO()->is($enums['FOO']));
+        $this->assertTrue(FooBar::BAR()->is($enums['BAR']));
+        $this->assertTrue(FooBar::BAZ()->is($enums['BAZ']));
+        $this->assertTrue(FooBar::MONKEYS()->is($enums['MONKEYS']));
+    }
+
+    /**
+     * @test
+     */
+    public function random_returnsRandomValidEnum()
+    {
+        $enum = FooBar::random();
+
+        $this->assertInstanceOf(FooBar::class, $enum);
+    }
 }

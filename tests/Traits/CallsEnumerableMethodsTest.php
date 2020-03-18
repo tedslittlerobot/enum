@@ -50,4 +50,19 @@ class CallsEnumerableMethodsTest extends TestCase
         $this->expectException(BadMethodCallException::class);
         $enum->prepend('woop');
     }
+
+    /**
+     * @test
+     */
+    public function resolvedMethodCall_withConstName_handlesEdgeBugAndReturnsNewEnum()
+    {
+        $enum = FooBar::FOO();
+
+        $other = $enum->MONKEYS();
+
+        $this->assertFalse($enum === $other);
+        $this->assertFalse($enum->is($other));
+        $this->assertEquals('foo', $enum->value());
+        $this->assertEquals('monkeys', $other->value());
+    }
 }

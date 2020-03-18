@@ -2,7 +2,8 @@
 
 namespace Tlr\Phpnum\Traits;
 
-use Tlr\PhpnumTests\Doubles\FooBar;
+use Stringy\Stringy;
+use Tlr\Phpnum\Contracts\Enum;
 
 trait AccessesValueProperties
 {
@@ -47,27 +48,76 @@ trait AccessesValueProperties
     }
 
     /**
-     * @test
+     * Get a list of all resolved valid enums
+     *
+     * @return array
      */
-    public function allAccessor()
+    public static function all() : array
     {
-        $enums = FooBar::all();
-
-        $this->assertCount(4, $enums);
-
-        $this->assertTrue(FooBar::FOO()->is($enums['FOO']));
-        $this->assertTrue(FooBar::BAR()->is($enums['BAR']));
-        $this->assertTrue(FooBar::BAZ()->is($enums['BAZ']));
-        $this->assertTrue(FooBar::MONKEYS()->is($enums['MONKEYS']));
+        return array_map(function ($value) {
+            return new static($value);
+        }, static::values());
     }
 
     /**
-     * @test
+     * Get a random instantiated enum
+     *
+     * @return Enum
      */
-    public function randomAccessor()
+    public static function random() : Enum
     {
-        $enum = FooBar::random();
+        return new static(array_rand(array_flip(static::pureValues())));
+    }
 
-        $this->assertInstanceOf(FooBar::class, $enum);
+    /**
+     * Get the possible names / keys
+     *
+     * @return array
+     */
+    public static function names() : array
+    {
+        return array_keys(static::values());
+    }
+
+    /**
+     * Get the possible raw values (no keys/names)
+     *
+     * @return array
+     */
+    public static function pureValues() : array
+    {
+        return array_values(static::values());
+    }
+
+    /**
+     * Convert the given value to a friendly value
+     *
+     * @param  string $name
+     * @return string
+     */
+    protected static function friendlify(string $name) : string
+    {
+        return Stringy::create($name)
+            ->humanize()
+            ->titleize()
+            ;
+    }
+
+    /**
+     * Get the friendly value map
+     *
+     * @return array
+     */
+    public static function friendlyNames() : array
+    {
+        $values = static::values();
+
+        $keys   = array_keys($values);
+        $values = array_values($values);
+        $keys   = array_map(function ($key) {
+            return static::friendlify($key);
+        }, $keys);
+
+        return array_combine($keys, $values);
     }
 }

@@ -10,7 +10,6 @@ use Tlr\Phpnum\Traits\ComparesAgainstEnums;
 use Tlr\Phpnum\Traits\GeneratesEnums;
 use Tlr\Phpnum\Traits\ProvidesSerialisation;
 use Tlr\Phpnum\Traits\ResolvesAndCaches;
-use Tlr\Phpnum\Traits\StaticAccessors;
 
 abstract class Enum implements EnumContract
 {
@@ -19,8 +18,7 @@ abstract class Enum implements EnumContract
         ProvidesSerialisation,
         CallsEnumerableMethods,
         GeneratesEnums,
-        ResolvesAndCaches,
-        StaticAccessors;
+        ResolvesAndCaches;
 
     /**
      * The core enum value

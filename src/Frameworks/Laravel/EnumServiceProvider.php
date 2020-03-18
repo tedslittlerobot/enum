@@ -39,14 +39,4 @@ class EnumServiceProvider extends ServiceProvider
             return Rule::in($enum::pureValues());
         });
     }
-
-    /**
-     * Register any application services.
-     *
-     * @return void
-     */
-    public function register()
-    {
-        //
-    }
 }

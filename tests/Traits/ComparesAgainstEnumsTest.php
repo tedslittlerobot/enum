@@ -51,4 +51,43 @@ class ComparesAgainstEnumsTest extends TestCase
 
         $this->assertFalse($enum->is($other));
     }
+
+    /**
+     * @test
+     */
+    public function isOneOf_withSeveralInvalidEnums_andOneValid_passes()
+    {
+        $enum = FooBar::MONKEYS();
+
+        $this->assertTrue($enum->isOneOf(FooBar::FOO(), FooBar::BAR(), FooBar::MONKEYS()));
+    }
+
+    /**
+     * @test
+     */
+    public function isOneOf_withSeveralInvalidEnums_fails()
+    {
+        $enum = FooBar::MONKEYS();
+
+        $this->assertFalse($enum->isOneOf(FooBar::FOO(), FooBar::BAR()));
+    }
+
+    /**
+     * @test
+     */
+    public function static_has_withValidValue_returnsTrue()
+    {
+        $this->assertTrue(FooBar::has('foo'));
+        $this->assertTrue(FooBar::has('bar'));
+        $this->assertTrue(FooBar::has('baz'));
+        $this->assertTrue(FooBar::has('monkeys'));
+    }
+
+    /**
+     * @test
+     */
+    public function static_has_withInvalidValue_returnsFalse()
+    {
+        $this->assertFalse(FooBar::has('woop'));
+    }
 }

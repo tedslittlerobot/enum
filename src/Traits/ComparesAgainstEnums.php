@@ -39,4 +39,26 @@ trait ComparesAgainstEnums
 
         return false;
     }
+
+    /**
+     * Check if the key exists on the enum
+     *
+     * @param  string  $key
+     * @return boolean
+     */
+    public static function has(string $key) : bool
+    {
+        return in_array($key, static::values());
+    }
+
+    /**
+     * Check if the key/name exists on the enum
+     *
+     * @param  string  $key
+     * @return boolean
+     */
+    public static function hasName(string $key) : bool
+    {
+        return isset(static::values()[$key]);
+    }
 }
