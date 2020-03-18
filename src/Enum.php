@@ -29,19 +29,14 @@ abstract class Enum implements EnumContract
      */
     private $value;
 
+    /**
+     * Enum constructor.
+     *
+     * @param $value
+     */
     public function __construct($value)
     {
         $this->setValue($value);
-    }
-
-    /**
-     * Get the value of the enum
-     *
-     * @return mixed
-     */
-    public function value()
-    {
-        return $this->value;
     }
 
     /**
@@ -60,6 +55,16 @@ abstract class Enum implements EnumContract
         $this->value = static::checkValue($value);
 
         return $this;
+    }
+
+    /**
+     * Get the value of the enum
+     *
+     * @return mixed
+     */
+    public function value()
+    {
+        return $this->value;
     }
 
     ////////////////////////////// STATIC METHODS //////////////////////////////

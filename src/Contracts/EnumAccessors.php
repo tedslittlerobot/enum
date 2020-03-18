@@ -66,4 +66,11 @@ interface EnumAccessors
      * @return array
      */
     public static function all() : array;
+
+    /**
+     * Get a random instantiated enum
+     *
+     * @return Enum
+     */
+    public static function random() : Enum;
 }
