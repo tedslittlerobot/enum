@@ -193,7 +193,6 @@ class EnumTest extends TestCase
         $other = TestClassEnum::ONE();
 
         $this->assertTrue($enum->is($other));
-        $this->assertTrue($enum->equals($other));
     }
 
     /**
@@ -207,7 +206,6 @@ class EnumTest extends TestCase
         $other = null;
 
         $this->assertFalse($enum->is($other));
-        $this->assertFalse($enum->equals($other));
     }
 
     /**
@@ -221,7 +219,6 @@ class EnumTest extends TestCase
         $other = TestClassEnum::TWO();
 
         $this->assertFalse($enum->is($other));
-        $this->assertFalse($enum->equals($other));
     }
 
     /**
@@ -235,7 +232,6 @@ class EnumTest extends TestCase
         $other = TestClassDuplicateEnum::ONE();
 
         $this->assertFalse($enum->is($other));
-        $this->assertFalse($enum->equals($other));
     }
 
     /**
