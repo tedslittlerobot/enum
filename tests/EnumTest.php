@@ -1,65 +1,16 @@
 <?php
 
+namespace Tlr\PhpnumTests;
+
+use BadMethodCallException;
 use PHPUnit\Framework\TestCase;
-use Tlr\Phpnum\Enum;
-
-class TestClassEnum extends Enum
-{
-    protected static $enum = [
-        'ONE'        => 'a',
-        'TWO'        => 'b',
-        'THREE'      => 'c',
-        'TWENTY_SIX' => 'z',
-    ];
-
-    public function resolveForOne(...$args)
-    {
-        return implode(',', $args);
-    }
-
-    public function resolveForTwentySix()
-    {
-        return 'twenty-six';
-    }
-}
-
-class TestClassEnumConst extends Enum
-{
-    const ONE        = 'a';
-    const TWO        = 'a';
-    const THREE      = 'a';
-    const TWENTY_SIX = 'a';
-}
-
-class TestClassDuplicateEnum extends Enum
-{
-    protected static $enum = [
-        'ONE'        => 'a',
-        'TWO'        => 'b',
-        'THREE'      => 'c',
-        'TWENTY_SIX' => 'z',
-    ];
-}
-
-class TestClassNumericEnum extends Enum
-{
-    protected static $enum = [
-        'ONE'        => 1,
-        'TWO'        => 2,
-        'THREE'      => 3,
-        'TWENTY_SIX' => 26,
-    ];
-}
-
-class TestClassConflictEnumOne extends Enum
-{
-    const ONE = 'a';
-}
-
-class TestClassConflictEnumTwo extends Enum
-{
-    const TWO = 'b';
-}
+use Tlr\Phpnum\Contracts\Enum;
+use Tlr\PhpnumTests\Doubles\ConflictOne;
+use Tlr\PhpnumTests\Doubles\ConflictTwo;
+use Tlr\PhpnumTests\Doubles\FooBar;
+use Tlr\PhpnumTests\Doubles\FooBarStatic;
+use Tlr\PhpnumTests\Doubles\SuperstitiousNumbers;
+use UnexpectedValueException;
 
 class EnumTest extends TestCase
 {
@@ -71,8 +22,8 @@ class EnumTest extends TestCase
     public function testGetAllNames()
     {
         $this->assertEquals([
-            'ONE', 'TWO', 'THREE', 'TWENTY_SIX',
-        ], TestClassEnum::names());
+            'FOO', 'BAR', 'BAZ', 'MONKEYS',
+        ], FooBar::names());
     }
 
     /**
@@ -80,11 +31,11 @@ class EnumTest extends TestCase
      *
      * @return void
      */
-    public function testConstInstantiation()
+    public function testStaticInstantiation()
     {
         $this->assertEquals([
-            'ONE', 'TWO', 'THREE', 'TWENTY_SIX',
-        ], TestClassEnumConst::names());
+            'FOO', 'BAR', 'BAZ', 'MONKEYS',
+        ], FooBarStatic::names());
     }
 
     /**
@@ -96,11 +47,11 @@ class EnumTest extends TestCase
     {
         $this->assertEquals([
             'ONE',
-        ], TestClassConflictEnumOne::names());
+        ], ConflictOne::names());
 
         $this->assertEquals([
             'TWO',
-        ], TestClassConflictEnumTwo::names());
+        ], ConflictTwo::names());
     }
 
     /**
@@ -110,11 +61,11 @@ class EnumTest extends TestCase
      */
     public function testCanInstantiate()
     {
-        $enum = new TestClassEnum('a');
+        $enum = new FooBar('foo');
 
         $this->assertInstanceOf(Enum::class, $enum);
-        $this->assertEquals('ONE', $enum->name());
-        $this->assertEquals('a', $enum->value());
+        $this->assertEquals('FOO', $enum->name());
+        $this->assertEquals('foo', $enum->value());
     }
 
     /**
@@ -126,7 +77,7 @@ class EnumTest extends TestCase
     {
         $this->expectException(UnexpectedValueException::class);
 
-        $enum = new TestClassEnum('π');
+        $enum = new SuperstitiousNumbers('π');
     }
 
     /**
@@ -136,9 +87,9 @@ class EnumTest extends TestCase
      */
     public function testFriendlyName()
     {
-        $enum = TestClassEnum::TWENTY_SIX();
+        $enum = SuperstitiousNumbers::KA_TET();
 
-        $this->assertEquals('Twenty Six', $enum->friendlyName());
+        $this->assertEquals('Ka Tet', $enum->friendlyName());
     }
 
     /**
@@ -148,10 +99,10 @@ class EnumTest extends TestCase
      */
     public function testCanMagicallyInstantiate()
     {
-        $enum = TestClassEnum::ONE();
+        $enum = FooBar::MONKEYS();
 
-        $this->assertInstanceOf(Enum::class, $enum);
-        $this->assertEquals('a', $enum->value());
+        $this->assertInstanceOf(FooBar::class, $enum);
+        $this->assertEquals('monkeys', $enum->value());
     }
 
     /**
@@ -163,7 +114,7 @@ class EnumTest extends TestCase
     {
         $this->expectException(BadMethodCallException::class);
 
-        $enum = TestClassEnum::FOUR();
+        $enum = SuperstitiousNumbers::PI();
     }
 
     /**
@@ -173,13 +124,13 @@ class EnumTest extends TestCase
      */
     public function testStringConversion()
     {
-        $enum = TestClassEnum::ONE();
+        $enum = FooBar::MONKEYS();
 
-        $this->assertSame('a', (string) $enum);
+        $this->assertSame('monkeys', (string) $enum);
 
-        $enum = TestClassNumericEnum::THREE();
+        $enum = SuperstitiousNumbers::KA_TET();
 
-        $this->assertSame('3', (string) $enum);
+        $this->assertSame('19', (string) $enum);
     }
 
     /**
@@ -189,8 +140,8 @@ class EnumTest extends TestCase
      */
     public function testEqualityComparison()
     {
-        $enum = TestClassEnum::ONE();
-        $other = TestClassEnum::ONE();
+        $enum = FooBar::MONKEYS();
+        $other = FooBar::MONKEYS();
 
         $this->assertTrue($enum->is($other));
     }
@@ -202,7 +153,7 @@ class EnumTest extends TestCase
      */
     public function testNullEqualityComparison()
     {
-        $enum = TestClassEnum::ONE();
+        $enum = FooBar::MONKEYS();
         $other = null;
 
         $this->assertFalse($enum->is($other));
@@ -215,8 +166,8 @@ class EnumTest extends TestCase
      */
     public function testEqualityComparisonFailsWhenSameClass()
     {
-        $enum = TestClassEnum::ONE();
-        $other = TestClassEnum::TWO();
+        $enum = FooBar::FOO();
+        $other = FooBar::BAR();
 
         $this->assertFalse($enum->is($other));
     }
@@ -228,8 +179,8 @@ class EnumTest extends TestCase
      */
     public function testEqualityComparisonFailsWhenDifferentClassWithSameValue()
     {
-        $enum = TestClassEnum::ONE();
-        $other = TestClassDuplicateEnum::ONE();
+        $enum = FooBar::MONKEYS();
+        $other = FooBarStatic::MONKEYS();
 
         $this->assertFalse($enum->is($other));
     }
@@ -241,8 +192,8 @@ class EnumTest extends TestCase
      */
     public function testInstantiationFromIdenticalEnum()
     {
-        $enum = TestClassEnum::ONE();
-        $other = new TestClassEnum($enum);
+        $enum = FooBar::MONKEYS();
+        $other = new FooBar($enum);
 
         $this->assertTrue($enum->is($other));
         $this->assertFalse($enum === $other);
@@ -255,8 +206,8 @@ class EnumTest extends TestCase
      */
     public function testInstantiationFromSimilarEnum()
     {
-        $enum = TestClassEnum::ONE();
-        $other = new TestClassDuplicateEnum($enum);
+        $enum = FooBar::MONKEYS();
+        $other = new FooBarStatic($enum);
 
         $this->assertFalse($enum->is($other));
         $this->assertFalse($enum === $other);
@@ -270,11 +221,11 @@ class EnumTest extends TestCase
      */
     public function testJsonEncoding()
     {
-        $enum = TestClassEnum::ONE();
+        $enum = FooBar::MONKEYS();
 
         $encoded = json_encode(['enum' => $enum]);
 
-        $this->assertEquals('{"enum":"a"}', $encoded);
+        $this->assertEquals('{"enum":"monkeys"}', $encoded);
     }
 
     /**
@@ -284,10 +235,10 @@ class EnumTest extends TestCase
      */
     public function testSerialisation()
     {
-        $enum = TestClassEnum::ONE();
+        $enum = FooBar::MONKEYS();
         $encoded = serialize($enum);
 
-        $this->assertEquals('C:13:"TestClassEnum":3:{"a"}', $encoded);
+        $this->assertEquals('C:30:"Tlr\PhpnumTests\Doubles\FooBar":9:{"monkeys"}', $encoded);
 
         $other = unserialize($encoded);
 
@@ -302,12 +253,14 @@ class EnumTest extends TestCase
      */
     public function testAllAccessor()
     {
-        $enum = TestClassEnum::all();
+        $enums = FooBar::all();
 
-        $this->assertTrue(TestClassEnum::ONE()->is($enum['ONE']));
-        $this->assertTrue(TestClassEnum::TWO()->is($enum['TWO']));
-        $this->assertTrue(TestClassEnum::THREE()->is($enum['THREE']));
-        $this->assertTrue(TestClassEnum::TWENTY_SIX()->is($enum['TWENTY_SIX']));
+        $this->assertCount(4, $enums);
+
+        $this->assertTrue(FooBar::FOO()->is($enums['FOO']));
+        $this->assertTrue(FooBar::BAR()->is($enums['BAR']));
+        $this->assertTrue(FooBar::BAZ()->is($enums['BAZ']));
+        $this->assertTrue(FooBar::MONKEYS()->is($enums['MONKEYS']));
     }
 
 
@@ -318,58 +271,8 @@ class EnumTest extends TestCase
      */
     public function testRandomAccessor()
     {
-        $enum = TestClassEnum::random();
+        $enum = FooBar::random();
 
-        $this->assertInstanceof(TestClassEnum::class, $enum);
-    }
-
-    /**
-     * A basic test example.
-     *
-     * @return void
-     */
-    public function testResolvedMethodCall_toSingleWordMethod()
-    {
-        $enum = TestClassEnum::ONE();
-        $result = $enum->resolve('foo', 'bar', 'baz');
-
-        $this->assertEquals('foo,bar,baz', $result);
-    }
-
-    /**
-     * A basic test example.
-     *
-     * @return void
-     */
-    public function testResolvedMethodCall_toMultiWordWordKey()
-    {
-        $enum = TestClassEnum::TWENTY_SIX();
-        $result = $enum->resolve('foo', 'bar', 'baz');
-
-        $this->assertEquals('twenty-six', $result);
-    }
-
-    /**
-     * A basic test example.
-     *
-     * @return void
-     */
-    public function testResolvedMethodCall_withBadMethod_throws()
-    {
-        $enum = TestClassEnum::TWENTY_SIX();
-        $this->expectException(BadMethodCallException::class);
-        $result = $enum->monkey('foo', 'bar', 'baz');
-    }
-
-    /**
-     * A basic test example.
-     *
-     * @return void
-     */
-    public function testResolvedMethodCall_withInvalidMethodViaType_throws()
-    {
-        $enum = TestClassEnum::TWO();
-        $this->expectException(BadMethodCallException::class);
-        $result = $enum->resolve('foo', 'bar', 'baz');
+        $this->assertInstanceOf(FooBar::class, $enum);
     }
 }

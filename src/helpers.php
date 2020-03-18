@@ -9,7 +9,7 @@ use Tlr\Phpnum\Contracts\Enum;
  *
  * @param  string $class
  * @param  mixed $value
- * @return ?Core
+ * @return Enum|null
  */
 function enum_getter(string $class, $value = null) : ?Enum
 {
