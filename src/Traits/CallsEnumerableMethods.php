@@ -4,11 +4,11 @@ namespace Tlr\Phpnum\Traits;
 
 use BadMethodCallException;
 
-trait ResolvesAndCallsMethodsFromName
+trait CallsEnumerableMethods
 {
     /**
      * Call a type specific method
-     * 
+     *
      * @param string $action
      * @param mixed  ...$arguments
      *

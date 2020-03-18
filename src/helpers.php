@@ -2,22 +2,22 @@
 
 namespace Tlr\Phpnum;
 
-use Tlr\Phpnum\Core\Core;
+use Tlr\Phpnum\Contracts\Enum;
 
 /**
  * Helper for model getters using enums
  *
  * @param  string $class
  * @param  mixed $value
- * @return ?Core
+ * @return Enum|null
  */
-function enum_getter(string $class, $value = null) : ?Core
+function enum_getter(string $class, $value = null) : ?Enum
 {
     if (is_numeric($value)) {
         $value = (int) $value;
     }
 
-    if ($value instanceof Core) {
+    if ($value instanceof Enum) {
         $value = $value->value();
     }
 

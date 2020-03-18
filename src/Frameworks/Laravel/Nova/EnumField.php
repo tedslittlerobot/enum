@@ -1,11 +1,18 @@
 <?php
 
-namespace Tlr\Phpnum\Laravel\Nova;
+namespace Tlr\Phpnum\Frameworks\Laravel\Nova;
 
 use Illuminate\Validation\Rule;
 use Laravel\Nova\Fields\Select;
 use Laravel\Nova\Http\Requests\NovaRequest;
 
+/**
+ * Class EnumField
+ *
+ * @package Tlr\Phpnum\Frameworks\Laravel\Nova
+ *
+ * @codeCoverageIgnore
+ */
 class EnumField extends Select
 {
     /**

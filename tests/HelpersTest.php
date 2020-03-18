@@ -1,16 +1,11 @@
 <?php
 
-use PHPUnit\Framework\TestCase;
-use Tlr\Phpnum\Enum;
-use function Tlr\Phpnum\{enum_getter, enum_setter};
+namespace Tlr\PhpnumTests;
 
-class TestEnumHelpers extends Enum
-{
-    const A = 1;
-    const B = 2;
-    const C = 3;
-    const D = 'dee';
-}
+use PHPUnit\Framework\TestCase;
+use function Tlr\Phpnum\{enum_getter, enum_setter};
+use Tlr\PhpnumTests\Doubles\OneTwoThreeD;
+use UnexpectedValueException;
 
 class HelpersTest extends TestCase
 {
@@ -21,15 +16,15 @@ class HelpersTest extends TestCase
      */
     public function testEnumGetter()
     {
-        $this->assertNull(enum_getter(TestEnumHelpers::class, null));
-        $this->assertNull(enum_getter(TestEnumHelpers::class));
+        $this->assertNull(enum_getter(OneTwoThreeD::class, null));
+        $this->assertNull(enum_getter(OneTwoThreeD::class));
 
-        $this->assertSame(2, enum_getter(TestEnumHelpers::class, 2)->value());
-        $this->assertSame(2, enum_getter(TestEnumHelpers::class, '2')->value());
+        $this->assertSame(2, enum_getter(OneTwoThreeD::class, 2)->value());
+        $this->assertSame(2, enum_getter(OneTwoThreeD::class, '2')->value());
 
-        $origin = TestEnumHelpers::B();
-        $this->assertSame(2, enum_getter(TestEnumHelpers::class, $origin)->value());
-        $this->assertNotSame($origin, enum_getter(TestEnumHelpers::class, $origin)->value());
+        $origin = OneTwoThreeD::TWO();
+        $this->assertSame(2, enum_getter(OneTwoThreeD::class, $origin)->value());
+        $this->assertNotSame($origin, enum_getter(OneTwoThreeD::class, $origin)->value());
     }
 
     /**
@@ -39,14 +34,14 @@ class HelpersTest extends TestCase
      */
     public function testEnumSetter()
     {
-        $this->assertNull(enum_setter(TestEnumHelpers::class, null, true));
+        $this->assertNull(enum_setter(OneTwoThreeD::class, null, true));
 
-        $origin = TestEnumHelpers::B();
-        $this->assertSame(2, enum_setter(TestEnumHelpers::class, $origin));
+        $origin = OneTwoThreeD::TWO();
+        $this->assertSame(2, enum_setter(OneTwoThreeD::class, $origin));
 
-        $this->assertSame(2, enum_setter(TestEnumHelpers::class, 2));
-        $this->assertSame(2, enum_setter(TestEnumHelpers::class, '2'));
-        $this->assertSame('dee', enum_setter(TestEnumHelpers::class, 'dee'));
+        $this->assertSame(2, enum_setter(OneTwoThreeD::class, 2));
+        $this->assertSame(2, enum_setter(OneTwoThreeD::class, '2'));
+        $this->assertSame('d', enum_setter(OneTwoThreeD::class, 'd'));
     }
 
     /**
@@ -58,6 +53,6 @@ class HelpersTest extends TestCase
     {
         $this->expectException(UnexpectedValueException::class);
 
-        enum_setter(TestEnumHelpers::class, null);
+        enum_setter(OneTwoThreeD::class, null);
     }
 }
