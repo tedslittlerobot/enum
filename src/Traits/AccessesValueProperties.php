@@ -2,6 +2,8 @@
 
 namespace Tlr\Phpnum\Traits;
 
+use Tlr\PhpnumTests\Doubles\FooBar;
+
 trait AccessesValueProperties
 {
     /**
@@ -42,5 +44,30 @@ trait AccessesValueProperties
     public function __toString()
     {
         return $this->toString();
+    }
+
+    /**
+     * @test
+     */
+    public function allAccessor()
+    {
+        $enums = FooBar::all();
+
+        $this->assertCount(4, $enums);
+
+        $this->assertTrue(FooBar::FOO()->is($enums['FOO']));
+        $this->assertTrue(FooBar::BAR()->is($enums['BAR']));
+        $this->assertTrue(FooBar::BAZ()->is($enums['BAZ']));
+        $this->assertTrue(FooBar::MONKEYS()->is($enums['MONKEYS']));
+    }
+
+    /**
+     * @test
+     */
+    public function randomAccessor()
+    {
+        $enum = FooBar::random();
+
+        $this->assertInstanceOf(FooBar::class, $enum);
     }
 }
