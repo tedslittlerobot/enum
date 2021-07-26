@@ -4,14 +4,14 @@
     "description": "An enum package optimised for laravel based on myclabs/enum",
     "type": "library",
     "require": {
-        "php": "^7.2.0",
+        "php": "^8.0.0",
         "ext-json": "*",
         "danielstjules/stringy": "^3.1"
     },
     "require-dev": {
         "mockery/mockery": "^1.2",
-        "phpunit/php-code-coverage": "^6.1",
-        "phpunit/phpunit": "^7.5",
+        "phpunit/php-code-coverage": "^9.0",
+        "phpunit/phpunit": "^9.0",
         "squizlabs/php_codesniffer": "^3.4"
     },
     "autoload": {
